@@ -1,31 +1,13 @@
 use strict;
 use warnings FATAL => 'all';
-use Module::Build;
- 
-my $class = Module::Build->subclass(
-    code => <<'__CODE__',
-    use Devel::PPPort;
- 
-    sub ACTION_build {
-        my $self = shift;
-        $self->depends_on('ppport_h');
-        $self->SUPER::ACTION_build;
-    }
- 
-    sub ACTION_ppport_h {
-        my $self = shift;
-        my $filepath = './lib/Algorithm/ppport.h';
-        unless (-e $filepath) {
-            print "Writing $filepath\n";
-            Devel::PPPort::WriteFile($filepath);
-        }
-        $self->add_to_cleanup($filepath);
-    }
- 
-__CODE__
+use Module::Build::Pluggable (
+    'XSUtil' => {
+        cc_warnings => 1,
+        ppport      => 'lib/Algorithm/ppport.h',
+    },
 );
- 
-my $builder = $class->new(
+
+my $builder = Module::Build::Pluggable->new(
     module_name        => 'Algorithm::HyperLogLog',
     dist_author        => 'Hideaki Ohno<hide.o.j55@gmail.com>',
     license            => 'perl',
@@ -34,19 +16,20 @@ my $builder = $class->new(
         'Test::More'  => '0.98',
         'Test::Fatal' => '0.008',
     },
-    requires => {
-        'XSLoader' => 0,
-    },
+    requires       => { 'XSLoader' => 0, },
     needs_compiler => 1,
-    c_source => 'src',
-    xs_files => {
+    c_source       => 'src',
+    xs_files       => {
         './src/hyperloglog.xs' => './lib/Algorithm/HyperLogLog.xs',
     },
     no_index => { 'directory' => [ 't', 'xt', 'inc', 'eg' ] },
     test_files => ( -d '.git' || $ENV{RELEASE_TESTING} ) ? [qw(t/ xt/)] : ['t/'],
-    create_readme      => 1,
-    add_to_cleanup     => ['Algorithm-HyperLogLog-*'],
-    meta_merge         => {
+    create_readme  => 1,
+    add_to_cleanup => [
+        'Algorithm-HyperLogLog-*', 'lib/Algorithm/typemap', 'MANIFEST.bak', 'lib/Algorithm/*.o',
+        'lib/Algorithm/*.h',       'lib/Algorithm/*.c',     'lib/Algorithm/*.xs',
+    ],
+    meta_merge => {
         keywords  => [qw/HyperLogLog cardinality/],
         resources => {
             repository => 'git://github.com/hideo55/Data-Iterator-SlidingWindow.git',
@@ -54,5 +37,5 @@ my $builder = $class->new(
         },
     },
 );
- 
+
 $builder->create_build_script();

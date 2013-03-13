@@ -28,3 +28,8 @@ MYMETA\.
 ^Build$
 ^Algorithm-
 ^MANIFEST\.
+^lib/Algorithm/.+\.c
+^lib/Algorithm/.+\.h
+^lib/Algorithm/.+\.o
+^lib/Algorithm/.+\.xs
+

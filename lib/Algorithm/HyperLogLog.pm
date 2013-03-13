@@ -18,6 +18,18 @@ __END__
 
 Algorithm::HyperLogLog - Implementation of the HyperLogLog algorithm
 
+=head1 SYNOPSIS
+
+=head1 DESCRIPTION
+
+=head1 METHODS
+
+=head2 new(register_size)
+
+=head2 add($data)
+
+=head2 estimate()
+
 =head1 AUTHOR
 
 Hideaki Ohno E<lt>hide.o.j55 {at} gmail.comE<gt>

@@ -4,18 +4,32 @@ use Test::More;
 use Test::Fatal qw(exception lives_ok);
 use Algorithm::HyperLogLog;
  
-my $hll = Algorithm::HyperLogLog->new(6);
+my $hll = Algorithm::HyperLogLog->new(7);
  
-my %unique;
+my %unique = ( q{} => 1 );
  
 for(0..99999){
-    my $str = random_string(5);
+    my $str = q{};
+    while( exists $unique{$str} ){
+        $str = random_string(10);
+    }
     $unique{$str} = 1;
     $hll->add($str);
 }
+
+$unique{'foo'} = 1;
+for(0..999999){
+    $hll->add('foo');
+}
+
+$unique{'bar'} = 1;
+for(0..999999){
+    $hll->add('bar');
+}
+
  
-warn $hll->cardinality;
-warn scalar(keys %unique);
+warn $hll->estimate;
+warn scalar(keys %unique) -1;
  
 ok(1);
  
