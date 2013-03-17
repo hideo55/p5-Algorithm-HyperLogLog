@@ -10,10 +10,10 @@
 
 typedef struct HyperLogLog {
     uint32_t m;
-    uint8_t  k;
-    char*    registers;
-    double   alphaMM;
-} *HLL;
+    uint8_t k;
+    char* registers;
+    double alphaMM;
+}*HLL;
 
 #define GET_HLLPTR(x) get_hll(aTHX_ x, "$self")
 
@@ -48,9 +48,9 @@ static HLL get_hll(pTHX_ SV* object, const char* context) {
 
 uint8_t rho(uint32_t x, uint8_t b) {
     uint8_t v = 1;
-    while(v<=b && !(x & 0x80000000)){
+    while (v <= b && !(x & 0x80000000)) {
         v++;
-        x<<= 1;
+        x <<= 1;
     }
     return v;
 }
@@ -60,93 +60,95 @@ MODULE = Algorithm::HyperLogLog PACKAGE = Algorithm::HyperLogLog
 PROTOTYPES: DISABLE
 
 SV *
-new(const char *cls, uint32_t k)
-    PREINIT:
-        HLL hll;
-    CODE:
-        New(__LINE__, hll, 1, struct HyperLogLog);
-        if( k < 4 || k > 16 ) {
-            croak("Number of ragisters must be in the range [4,16]");
-        }
-        hll->k = k;
-        hll->m = 1 << hll->k;
-        hll->registers = (char *)malloc(hll->m * sizeof(char));
-        memset(hll->registers, 0, hll->m);
+new(const char *class, uint32_t k)
+PREINIT:
+HLL hll;
+CODE:
+{
+    New(__LINE__, hll, 1, struct HyperLogLog);
+    if( k < 4 || k > 16 ) {
+        croak("Number of ragisters must be in the range [4,16]");
+    }
+    hll->k = k;
+    hll->m = 1 << hll->k;
+    hll->registers = (char *)malloc(hll->m * sizeof(uint8_t));
+    memset(hll->registers, 0, hll->m);
 
-        double alpha = 0.0;
-        switch (hll->m) {
-            case 16:
-                alpha = 0.673;
-                break;
-            case 32:
-                alpha = 0.697;
-                break;
-            case 64:
-                alpha = 0.709;
-                break;
-            default:
-                alpha = 0.7213/(1.0 + (1.079/(double) hll->m));
-                break;
-        }
-        hll->alphaMM = alpha * hll->m * hll->m;
+    double alpha = 0.0;
+    switch (hll->m) {
+        case 16:
+        alpha = 0.673;
+        break;
+        case 32:
+        alpha = 0.697;
+        break;
+        case 64:
+        alpha = 0.709;
+        break;
+        default:
+        alpha = 0.7213/(1.0 + (1.079/(double) hll->m));
+        break;
+    }
+    hll->alphaMM = alpha * hll->m * hll->m;
 
-        RETVAL = sv_newmortal();
-        sv_setref_pv(RETVAL, cls, (void *) hll);
-        (void)SvREFCNT_inc(RETVAL);
-    OUTPUT:
-        RETVAL
-
+    RETVAL = sv_newmortal();
+    sv_setref_pv(RETVAL, class, (void *) hll);
+    (void)SvREFCNT_inc(RETVAL);
+}
+OUTPUT:
+    RETVAL
 
 void
 add(HLL self, const char* str)
-    CODE:
-        uint32_t hash;
-        MurmurHash3_x86_32((void *) str, strlen(str), HLL_HASH_SEED, (void *) &hash);
-        uint32_t index = (hash >> (32 - self->k));
-        uint8_t rank = rho( (hash << self->k), 32 - self->k );
-        if( rank > self->registers[index] ) {
-            self->registers[index] = rank;
-        }
-
+CODE:
+{
+    uint32_t hash;
+    MurmurHash3_x86_32((void *) str, strlen(str), HLL_HASH_SEED, (void *) &hash);
+    uint32_t index = (hash >> (32 - self->k));
+    uint8_t rank = rho( (hash << self->k), 32 - self->k );
+    if( rank > self->registers[index] ) {
+        self->registers[index] = rank;
+    }
+}
 
 double
 estimate(HLL self)
-    CODE:
-        uint8_t m = self->m;
-        
+CODE:
+{
+    uint32_t m = self->m;
+    uint32_t i = 0;
+    uint32_t rank = 0;
+    double sum = 0.0;
+    for (i = 0; i < m; i++) {
+        rank = self->registers[i];
+        sum += 1.0/pow(2.0, rank);
+    }
+    double estimate = self->alphaMM/sum; // E in the original paper
+    if( estimate <= 2.5 * m ) {
+        uint32_t zeros = 0;
         uint32_t i = 0;
-        uint32_t rank = 0;
-        double sum = 0.0;
         for (i = 0; i < m; i++) {
-            rank = self->registers[i];
-            sum = sum + 1.0/pow(2.0, rank);
-        }
-
-        double estimate = self->alphaMM * (1.0 / sum);// E in the original paper
-        if( estimate <= 2.5 * m ) {
-            uint32_t V = 0;
-            uint32_t i = 0;
-
-            for (i = 0; i < m; i++) {
-                if (self->registers[i] == 0) {
-                    V++;
-                }
+            if (self->registers[i] == 0) {
+                zeros++;
             }
-
-            if (V != 0) {
-                /* LinearCounting(m,V) */
-                estimate = m * log((double)m/V);
-            }
-        } else if (estimate > (1.0/30.0) * two_32) {
-            estimate = neg_two_32 * log(1.0 - ( estimate/two_32 ) );
         }
-        RETVAL = estimate;
-    OUTPUT:
-        RETVAL
+        if( zeros != 0 ) {
+            estimate = m * log((double)m/zeros);
+        }
+    } else if (estimate > (1.0/30.0) * two_32) {
+        estimate = neg_two_32 * log(1.0 - ( estimate/two_32 ) );
+    }
+    
+    RETVAL = estimate;
+}
+OUTPUT:
+    RETVAL
 
 void
 DESTROY(HLL self)
 CODE:
+{
     Safefree(self->registers);
     Safefree (self);
+}
 

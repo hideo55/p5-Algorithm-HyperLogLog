@@ -7,7 +7,4 @@ INPUT
 T_PTROBJ_HLL
 	$var = GET_HLLPTR($arg); 
 
-T_IV
-	$var = ($type)SvIV($arg)
 
-################################################################

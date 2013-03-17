@@ -1,14 +1,32 @@
 package Algorithm::HyperLogLog;
 use strict;
 use warnings;
+use 5.008003;
 use XSLoader;
- 
-BEGIN{
-    our $VERSION = '0.01';
-    XSLoader::load __PACKAGE__, $VERSION;
+
+our $VERSION = '0.01';
+
+our $PERL_ONLY;
+if ( !defined $PERL_ONLY ) {
+    $PERL_ONLY = $ENV{PERL_HLL_PUREPERL} ? 1 : 0;
 }
- 
- 
+my $xs = 0;
+if ( !exists $INC{'Algorithm/HyperLogLog/PP.pm'} ) {
+    if ( !$PERL_ONLY ) {
+        eval {
+            XSLoader::load __PACKAGE__, $VERSION;
+            $xs = 1;
+        };
+    }
+    if ( !__PACKAGE__->can('new') ) {
+        require 'Algorithm/HyperLogLog/PP.pm';
+    }
+}
+
+sub XS {
+    $xs;
+}
+
 1;
 __END__
 
@@ -29,6 +47,8 @@ Algorithm::HyperLogLog - Implementation of the HyperLogLog algorithm
 =head2 add($data)
 
 =head2 estimate()
+
+=head2 XS()
 
 =head1 AUTHOR
 
