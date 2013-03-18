@@ -13,9 +13,6 @@ my $builder = Module::Build::Pluggable->new(
     module_name        => 'Algorithm::HyperLogLog',
     dist_author        => 'Hideaki Ohno<hide.o.j55@gmail.com>',
     license            => 'perl',
-    configure_requires => {
-        'Module::Build' => '' 0.40,
-    },
     needs_compiler => 1,
     c_source       => 'src',
     xs_files       => { './src/hyperloglog.xs' => './lib/Algorithm/HyperLogLog.xs', },
