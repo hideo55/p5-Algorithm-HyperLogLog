@@ -31,6 +31,8 @@ __END__
 
 =pod
 
+=encoding utf8
+
 =head1 NAME
 
 Algorithm::HyperLogLog - Implementation of the HyperLogLog algorithm
@@ -51,6 +53,7 @@ Algorithm::HyperLogLog - Implementation of the HyperLogLog algorithm
 =head1 DESCRIPTION
 
 This module is implementation of the HyperLogLog algorithm.
+
 HyperLogLog is an algorithm for estimating the cardinality of a set.
 
 =head1 METHODS
@@ -58,7 +61,9 @@ HyperLogLog is an algorithm for estimating the cardinality of a set.
 =head2 new($b)
 
 Constructor.
+
 `$b` is the parameter for determining register size. (The register size is 2^$b.)
+
 `$b` must be a integer between 4 and 16.
 
 =head2 add($data)
@@ -83,7 +88,7 @@ Hideaki Ohno E<lt>hide.o.j55 {at} gmail.comE<gt>
 
 =head1 THANKS TO
 
-Murmur3 L<https://github.com/PeterScott/murmur3>
+MurmurHash3(L<https://github.com/PeterScott/murmur3>)
 
 =over 4
 
