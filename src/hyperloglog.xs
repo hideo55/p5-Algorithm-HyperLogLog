@@ -118,7 +118,7 @@ double
 estimate(HLL self)
 CODE:
 {
-    double estimate
+    double estimate;
     uint32_t m = self->m;
     uint32_t i = 0;
     uint32_t rank = 0;
