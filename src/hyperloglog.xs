@@ -62,7 +62,8 @@ PROTOTYPES: DISABLE
 SV *
 new(const char *class, uint32_t k)
 PREINIT:
-HLL hll;
+    HLL hll;
+    double alpha  = 0.0;
 CODE:
 {
     New(__LINE__, hll, 1, struct HyperLogLog);
@@ -74,7 +75,6 @@ CODE:
     hll->registers = (char *)malloc(hll->m * sizeof(uint8_t));
     memset(hll->registers, 0, hll->m);
 
-    double alpha = 0.0;
     switch (hll->m) {
         case 16:
         alpha = 0.673;
@@ -100,12 +100,15 @@ OUTPUT:
 
 void
 add(HLL self, const char* str)
+PREINIT:
+    uint32_t hash;
+    uint32_t index;
+    uint8_t rank;
 CODE:
 {
-    uint32_t hash;
     MurmurHash3_x86_32((void *) str, strlen(str), HLL_HASH_SEED, (void *) &hash);
-    uint32_t index = (hash >> (32 - self->k));
-    uint8_t rank = rho( (hash << self->k), 32 - self->k );
+    index = (hash >> (32 - self->k));
+    rank = rho( (hash << self->k), 32 - self->k );
     if( rank > self->registers[index] ) {
         self->registers[index] = rank;
     }
@@ -115,6 +118,7 @@ double
 estimate(HLL self)
 CODE:
 {
+    double estimate;
     uint32_t m = self->m;
     uint32_t i = 0;
     uint32_t rank = 0;
@@ -123,7 +127,7 @@ CODE:
         rank = self->registers[i];
         sum += 1.0/pow(2.0, rank);
     }
-    double estimate = self->alphaMM/sum; // E in the original paper
+    estimate = self->alphaMM/sum; // E in the original paper
     if( estimate <= 2.5 * m ) {
         uint32_t zeros = 0;
         uint32_t i = 0;

@@ -1,6 +1,8 @@
 use strict;
 use warnings FATAL => 'all';
 use Module::Build::Pluggable (
+    'CPANfile',
+    'GithubMeta',
     'XSUtil' => {
         cc_warnings => 1,
         ppport      => 'lib/Algorithm/ppport.h',
@@ -11,12 +13,6 @@ my $builder = Module::Build::Pluggable->new(
     module_name        => 'Algorithm::HyperLogLog',
     dist_author        => 'Hideaki Ohno<hide.o.j55@gmail.com>',
     license            => 'perl',
-    configure_requires => { 'Module::Build' => '0.38' },
-    build_requires     => {
-        'Test::More'  => '0.98',
-        'Test::Fatal' => '0.008',
-    },
-    requires       => { 'XSLoader' => 0, },
     needs_compiler => 1,
     c_source       => 'src',
     xs_files       => {
@@ -29,10 +25,9 @@ my $builder = Module::Build::Pluggable->new(
         'Algorithm-HyperLogLog-*', 'lib/Algorithm/typemap', 'MANIFEST.bak', 'lib/Algorithm/*.o',
         'lib/Algorithm/*.h',       'lib/Algorithm/*.c',     'lib/Algorithm/*.xs',
     ],
-    meta_merge => {
+    meta_add => {
         keywords  => [qw/HyperLogLog cardinality/],
         resources => {
-            repository => 'git://github.com/hideo55/Data-Iterator-SlidingWindow.git',
             bugtracker => 'https://github.com/hideo55/Data-Iterator-SlidingWindow/issues',
         },
     },
