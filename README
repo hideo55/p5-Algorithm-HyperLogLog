@@ -2,14 +2,54 @@ NAME
     Algorithm::HyperLogLog - Implementation of the HyperLogLog algorithm
 
 SYNOPSIS
+      use Algorithm::HyperLogLog;
+  
+      my $hll = Algorithm::HyperLogLog->new(14);
+  
+      while(<>){
+          $hll->add($_);
+      }
+  
+      my $cardinality = $hll->estimate();
+
 DESCRIPTION
+    This module is implementation of the HyperLogLog algorithm.
+
+    HyperLogLog is an algorithm for estimating the cardinality of a set.
+
 METHODS
-  new(register_size)
+  new($b)
+    Constructor.
+
+    `$b` is the parameter for determining register size. (The register size
+    is 2^$b.)
+
+    `$b` must be a integer between 4 and 16.
+
   add($data)
+    Adds element to the cardinality estimator.
+
   estimate()
+    Returns estimated cardinality value in floation point number.
+
   XS()
+    If using XS backend, this method return true value.
+
+SEE ALSO
+    Philippe Flajolet, Éric Fusy, Olivier Gandouet and Frédéric Meunier.
+    HyperLogLog: the analysis of a near-optimal cardinality estimation
+    algorithm. 2007 Conference on Analysis of Algorithms, DMTCS proc. AH,
+    pp. 127–146, 2007.
+    <http://algo.inria.fr/flajolet/Publications/FlFuGaMe07.pdf>
+
 AUTHOR
     Hideaki Ohno <hide.o.j55 {at} gmail.com>
+
+THANKS TO
+    MurmurHash3(<https://github.com/PeterScott/murmur3>)
+
+    Austin Appleby
+    Peter Scott
 
 LICENSE
     This library is free software; you can redistribute it and/or modify it

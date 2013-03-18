@@ -3,6 +3,8 @@ Changes
 lib/Algorithm/HyperLogLog.pm
 lib/Algorithm/HyperLogLog/PP.pm
 MANIFEST			This list of files
+META.json
+META.yml
 README
 src/hyperloglog.xs
 src/murmur3.h
@@ -16,5 +18,3 @@ xt/02_perlcritic.t
 xt/03_pod.t
 xt/04_pod_coverage.t
 xt/perlcriticrc
-META.yml
-META.json
