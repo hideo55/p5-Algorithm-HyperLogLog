@@ -21,7 +21,6 @@
 \.sw[po]$
 \.project
 \.travis\.yml$
-^cpanfile$
 \.gitignore
 MYMETA\.
 ^cover_db

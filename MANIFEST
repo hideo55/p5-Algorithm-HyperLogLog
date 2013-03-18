@@ -1,5 +1,7 @@
 Build.PL
 Changes
+cpanfile
+eg/sample.pl
 lib/Algorithm/HyperLogLog.pm
 lib/Algorithm/HyperLogLog/PP.pm
 MANIFEST			This list of files
