@@ -10,21 +10,20 @@ our $PERL_ONLY;
 if ( !defined $PERL_ONLY ) {
     $PERL_ONLY = $ENV{PERL_HLL_PUREPERL} ? 1 : 0;
 }
-my $xs = 0;
+
 if ( !exists $INC{'Algorithm/HyperLogLog/PP.pm'} ) {
     if ( !$PERL_ONLY ) {
-        eval {
+        $PERL_ONLY = !eval {
             XSLoader::load __PACKAGE__, $VERSION;
-            $xs = 1;
         };
     }
-    if ( !__PACKAGE__->can('new') ) {
+    if ( $PERL_ONLY ) {
         require 'Algorithm/HyperLogLog/PP.pm';
     }
 }
 
 sub XS {
-    $xs;
+    !$PERL_ONLY;
 }
 
 1;
