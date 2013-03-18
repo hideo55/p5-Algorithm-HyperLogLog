@@ -1,6 +1,7 @@
 package Algorithm::HyperLogLog::PP;
 use strict;
 use warnings;
+use 5.008003;
 use constant {
     HLL_HASH_SEED => 313,
     TWO_32        => 4294967296.0,
