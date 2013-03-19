@@ -11,7 +11,7 @@
 typedef struct HyperLogLog {
     uint32_t m;
     uint8_t k;
-    char* registers;
+    uint8_t* registers;
     double alphaMM;
 }*HLL;
 
@@ -72,7 +72,7 @@ CODE:
     }
     hll->k = k;
     hll->m = 1 << hll->k;
-    hll->registers = (char *)malloc(hll->m * sizeof(uint8_t));
+    hll->registers = (uint8_t*)malloc(hll->m * sizeof(uint8_t));
     memset(hll->registers, 0, hll->m);
 
     switch (hll->m) {
@@ -121,11 +121,9 @@ CODE:
     double estimate;
     uint32_t m = self->m;
     uint32_t i = 0;
-    uint32_t rank = 0;
     double sum = 0.0;
     for (i = 0; i < m; i++) {
-        rank = self->registers[i];
-        sum += 1.0/pow(2.0, rank);
+        sum += 1.0/pow(2.0, self->registers[i]);
     }
     estimate = self->alphaMM/sum; // E in the original paper
     if( estimate <= 2.5 * m ) {
