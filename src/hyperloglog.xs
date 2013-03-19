@@ -72,7 +72,7 @@ CODE:
     }
     hll->k = k;
     hll->m = 1 << hll->k;
-    hll->registers = (char *)malloc(hll->m * sizeof(uint8_t));
+    hll->registers = (uint8_t*)malloc(hll->m * sizeof(uint8_t));
     memset(hll->registers, 0, hll->m);
 
     switch (hll->m) {
