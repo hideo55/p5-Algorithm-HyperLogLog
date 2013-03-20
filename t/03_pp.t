@@ -14,7 +14,7 @@ isa_ok $hll, 'Algorithm::HyperLogLog';
 ok !$hll->XS;
 
 my $error_sum = 0;
-my $repeat    = 10;
+my $repeat    = 100;
 
 for ( 1 .. $repeat ) {
 
@@ -22,7 +22,7 @@ for ( 1 .. $repeat ) {
 
     my %unique = ( q{} => 1 );
 
-    for ( 0 .. 9999 ) {
+    for ( 0 .. 999 ) {
         my $str = q{};
         while ( exists $unique{$str} ) {
             $str = random_string(10);
@@ -32,12 +32,12 @@ for ( 1 .. $repeat ) {
     }
 
     $unique{'foo'} = 1;
-    for ( 0 .. 99999 ) {
+    for ( 0 .. 999 ) {
         $hll->add('foo');
     }
 
     $unique{'bar'} = 1;
-    for ( 0 .. 99999 ) {
+    for ( 0 .. 999 ) {
         $hll->add('bar');
     }
 
@@ -52,7 +52,12 @@ for ( 1 .. $repeat ) {
 my $error_avg   = $error_sum / $repeat;
 my $error_ratio = $error_avg / 10001 * 100;
 
-ok( $error_ratio < 1.0 );
+if( $error_ratio < 1.0 ){
+    ok(1);
+}else{
+    diag $error_ratio;
+    fail(1);
+}
 
 done_testing();
 

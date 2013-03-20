@@ -35,7 +35,7 @@ __END__
 
 =head1 NAME
 
-Algorithm::HyperLogLog - Implementation of the HyperLogLog algorithm
+Algorithm::HyperLogLog - Implementation of the HyperLogLog cardinality estimation algorithm
 
 =head1 SYNOPSIS
 

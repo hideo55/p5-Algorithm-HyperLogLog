@@ -5,14 +5,15 @@ use Module::Build::Pluggable (
     'GithubMeta',
     'XSUtil' => {
         cc_warnings => 1,
+        c99         => 1,
         ppport      => 'lib/Algorithm/ppport.h',
     },
 );
 
 my $builder = Module::Build::Pluggable->new(
-    module_name        => 'Algorithm::HyperLogLog',
-    dist_author        => 'Hideaki Ohno<hide.o.j55@gmail.com>',
-    license            => 'perl',
+    module_name    => 'Algorithm::HyperLogLog',
+    dist_author    => 'Hideaki Ohno<hide.o.j55@gmail.com>',
+    license        => 'perl',
     needs_compiler => 1,
     c_source       => 'src',
     xs_files       => { './src/hyperloglog.xs' => './lib/Algorithm/HyperLogLog.xs', },

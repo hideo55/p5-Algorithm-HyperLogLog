@@ -13,7 +13,7 @@ for ( 1 .. $repeat ) {
 
     my %unique = ( q{} => 1 );
 
-    for ( 0 .. 9999 ) {
+    for ( 0 .. 999 ) {
         my $str = q{};
         while ( exists $unique{$str} ) {
             $str = random_string(10);
@@ -23,12 +23,12 @@ for ( 1 .. $repeat ) {
     }
 
     $unique{'foo'} = 1;
-    for ( 0 .. 99999 ) {
+    for ( 0 .. 999 ) {
         $hll->add('foo');
     }
 
     $unique{'bar'} = 1;
-    for ( 0 .. 99999 ) {
+    for ( 0 .. 999 ) {
         $hll->add('bar');
     }
 

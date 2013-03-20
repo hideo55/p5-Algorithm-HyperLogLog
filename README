@@ -1,5 +1,6 @@
 NAME
-    Algorithm::HyperLogLog - Implementation of the HyperLogLog algorithm
+    Algorithm::HyperLogLog - Implementation of the HyperLogLog cardinality
+    estimation algorithm
 
 SYNOPSIS
       use Algorithm::HyperLogLog;
