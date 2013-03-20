@@ -9,7 +9,7 @@ my $repeat = 100;
 
 for ( 1 .. $repeat ) {
 
-    my $hll = Algorithm::HyperLogLog->new(14);
+    my $hll = Algorithm::HyperLogLog->new(16);
 
     my %unique = ( q{} => 1 );
 
