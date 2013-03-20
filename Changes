@@ -1,5 +1,8 @@
 Revision history for Algorithm::HyperLogLog
 
+0.03    Thu Mar 21 03:15:00 2013
+        - Remove unnecessary code in XS
+
 0.02    Wed Mar 20 16:10:00 2013
         - Improve Windows(MSVC) support
 

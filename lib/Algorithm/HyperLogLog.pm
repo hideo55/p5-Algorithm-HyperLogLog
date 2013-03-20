@@ -4,7 +4,7 @@ use warnings;
 use 5.008003;
 use XSLoader;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 our $PERL_ONLY;
 if ( !defined $PERL_ONLY ) {
