@@ -3,13 +3,17 @@ use warnings;
 use Test::More;
 use Test::Fatal qw(exception lives_ok);
 use Algorithm::HyperLogLog;
+use Algorithm::HyperLogLog::PP;
+
+plan 'skip_all' => 'No XS' if !Algorithm::HyperLogLog->XS;
 
 my $error_sum = 0;
-my $repeat = 100;
+my $repeat    = 100;
 
 for ( 1 .. $repeat ) {
 
-    my $hll = Algorithm::HyperLogLog->new(16);
+    my $hll   = Algorithm::HyperLogLog->new(16);
+    my $hllpp = Algorithm::HyperLogLog::PP->new(16);
 
     my %unique = ( q{} => 1 );
 
@@ -20,28 +24,34 @@ for ( 1 .. $repeat ) {
         }
         $unique{$str} = 1;
         $hll->add($str);
+        $hllpp->add($str);
     }
 
     $unique{'foo'} = 1;
     for ( 0 .. 999 ) {
         $hll->add('foo');
+        $hllpp->add('foo');
     }
 
     $unique{'bar'} = 1;
     for ( 0 .. 999 ) {
         $hll->add('bar');
+        $hllpp->add('bar');
     }
 
     my $cardinality = $hll->estimate;
+    my $cardinalitypp = $hllpp->estimate;
+    
+    ok( $cardinality == $cardinalitypp );
 
     my $unique = scalar keys %unique;
-    
-    $error_sum += abs($unique - $cardinality);
-    
+
+    $error_sum += abs( $unique - $cardinality );
+
 }
 
-my $error_avg = $error_sum/$repeat;
-my $error_ratio = $error_avg/ 10001 * 100;
+my $error_avg   = $error_sum / $repeat;
+my $error_ratio = $error_avg / 10001 * 100;
 
 ok( $error_ratio < 1.0 );
 
