@@ -2,6 +2,7 @@ package Algorithm::HyperLogLog::PP;
 use strict;
 use warnings;
 use 5.008003;
+use Carp qw(croak);
 use constant {
     HLL_HASH_SEED => 313,
     TWO_32        => 4294967296.0,
@@ -11,12 +12,18 @@ use constant {
 require Algorithm::HyperLogLog;
 
 {
+
     package Algorithm::HyperLogLog;
     our @ISA = qw(Algorithm::HyperLogLog::PP);
 }
 
 sub new {
     my ( $class, $k ) = @_;
+
+    if ( $k < 4 || $k > 16 ) {
+        croak "Number of ragisters must be in the range [4,16]";
+    }
+
     my $m         = 1 << $k;
     my $registers = [ (0) x $m ];
     my $alpha     = 0;
@@ -45,9 +52,9 @@ sub new {
 
 sub add {
     my ( $self, $data ) = @_;
-    my $hash  = _murmur32($data, HLL_HASH_SEED);
+    my $hash = _murmur32( $data, HLL_HASH_SEED );
     my $index = ( $hash >> ( 32 - $self->{'k'} ) );
-    my $rank  = _rho( ( $hash << $self->{k} ), 32 - $self->{k} );
+    my $rank = _rho( ( $hash << $self->{k} ), 32 - $self->{k} );
     if ( $rank > $self->{registers}[$index] ) {
         $self->{registers}[$index] = $rank;
     }
@@ -81,6 +88,10 @@ sub estimate {
         $estimate = NEG_TWO_32 * log( 1.0 - ( $estimate / TWO_32 ) );
     }
     return $estimate;
+}
+
+sub XS {
+    0;
 }
 
 sub _rotl32 {
