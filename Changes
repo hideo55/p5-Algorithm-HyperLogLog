@@ -1,4 +1,7 @@
 Revision history for Algorithm::HyperLogLog
 
+0.02    Wed Mar 20 16:10:00 2013
+        - Improve Windows(MSVC) support
+
 0.01    Tue Mar 19 04:00:45 2013
         - Initial release
