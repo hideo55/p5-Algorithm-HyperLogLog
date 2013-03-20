@@ -39,10 +39,10 @@ for ( 1 .. $repeat ) {
         $hllpp->add('bar');
     }
 
-    my $cardinality = $hll->estimate;
+    my $cardinality   = $hll->estimate;
     my $cardinalitypp = $hllpp->estimate;
-    
-    ok( $cardinality == $cardinalitypp );
+
+    ok $cardinality == $cardinalitypp, 'XS and PP compatibility test';
 
     my $unique = scalar keys %unique;
 
@@ -53,7 +53,7 @@ for ( 1 .. $repeat ) {
 my $error_avg   = $error_sum / $repeat;
 my $error_ratio = $error_avg / 10001 * 100;
 
-ok( $error_ratio < 1.0 );
+ok $error_ratio < 1.0, 'Error ratio less than 1.0%';
 
 done_testing();
 

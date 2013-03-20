@@ -11,7 +11,7 @@ my $hll = Algorithm::HyperLogLog->new(6);
 
 isa_ok $hll, 'Algorithm::HyperLogLog';
 
-ok !$hll->XS;
+ok !$hll->XS, 'is Pure Perl?';
 
 my $error_sum = 0;
 my $repeat    = 100;
