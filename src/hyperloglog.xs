@@ -22,7 +22,6 @@ static const double neg_two_32 = -4294967296.0;
 
 static HLL get_hll(pTHX_ SV* object, const char* context) {
     SV *sv;
-    HV *stash, *class_stash;
     IV address;
 
     if (MAGIC) SvGETMAGIC(object);
@@ -32,11 +31,6 @@ static HLL get_hll(pTHX_ SV* object, const char* context) {
     }
     sv = SvRV(object);
     if (!SvOBJECT(sv)) croak("%s is not an object reference", context);
-    stash = SvSTASH(sv);
-    /* Is the next even possible ? */
-    if (!stash) croak("%s is not a typed reference", context);
-    class_stash = gv_stashpv("Algorithm::HyperLogLog", FALSE);
-    //if (!my_isa_lookup(aTHX_ stash, "Algorithm::HyperLogLog", class_stash, 22, 0)){
     if(!sv_derived_from(object,"Algorithm::HyperLogLog")) {
         croak("%s is not a Algorithm::HyperLogLog", context);
     }
