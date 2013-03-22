@@ -16,3 +16,8 @@ cover_db
 META.json
 _build
 Build
+lib/Algorithm/HyperLogLog.c
+lib/Algorithm/HyperLogLog.o
+lib/Algorithm/HyperLogLog.xs
+lib/Algorithm/ppport.h
+
