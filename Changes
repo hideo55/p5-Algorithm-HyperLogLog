@@ -1,5 +1,8 @@
 Revision history for Algorithm::HyperLogLog
 
+0.04    Sat Mar 23 01:50:00 2013
+        - Fixed: unportable tests 
+
 0.03    Thu Mar 21 03:15:00 2013
         - Remove unnecessary code in XS
 
