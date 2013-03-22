@@ -42,7 +42,14 @@ for ( 1 .. $repeat ) {
     my $cardinality   = $hll->estimate;
     my $cardinalitypp = $hllpp->estimate;
 
-    ok int($cardinality) == int($cardinalitypp), 'XS and PP compatibility test';
+    if ( int($cardinality) == int($cardinalitypp) ) {
+        ok 1, 'XS and PP compatibility test';
+    }
+    else {
+        diag $cardinality;
+        diag $cardinalitypp;
+        fail();
+    }
 
     my $unique = scalar keys %unique;
 
