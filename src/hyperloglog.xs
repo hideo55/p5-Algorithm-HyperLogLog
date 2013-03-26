@@ -54,7 +54,7 @@ MODULE = Algorithm::HyperLogLog PACKAGE = Algorithm::HyperLogLog
 PROTOTYPES: DISABLE
 
 SV *
-new(const char *class, uint32_t k)
+new(const char *klass, uint32_t k)
 PREINIT:
     HLL hll;
     double alpha  = 0.0;
@@ -86,7 +86,7 @@ CODE:
     hll->alphaMM = alpha * hll->m * hll->m;
 
     RETVAL = sv_newmortal();
-    sv_setref_pv(RETVAL, class, (void *) hll);
+    sv_setref_pv(RETVAL, klass, (void *) hll);
     (void)SvREFCNT_inc(RETVAL);
 }
 OUTPUT:
