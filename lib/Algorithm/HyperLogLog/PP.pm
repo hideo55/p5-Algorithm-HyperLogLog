@@ -96,53 +96,65 @@ sub XS {
 
 sub _rotl32 {
     my ( $x, $r ) = @_;
-    return ( ( $x << $r ) | ( $x >> ( 32 - $r ) ) ) & 0xffffffff;
+    return ( ( $x << $r ) | ( $x >> ( 32 - $r ) ) );
 }
 
 sub _fmix32 {
     my $h = shift;
-    $h = $h ^ ( $h >> 16 );
-    $h = ( $h * 0x85ebca6b ) & 0xffffffff;
-    $h = $h ^ ( $h >> 13 );
-    $h = ( $h * 0xc2b2ae35 ) & 0xffffffff;
-    $h = $h ^ ( $h >> 16 );
+    $h = ($h ^ ( $h >> 16 ));
+    {
+	    use integer;
+    	$h = _to_uint( ( $h * 0x85ebca6b ) & 0xffffffff );
+	}
+    $h = ( $h ^ ( $h >> 13 ) );
+	{
+		use integer;
+    	$h = _to_uint( ( $h * 0xc2b2ae35 ) & 0xffffffff );
+	}
+    $h = ( $h ^ ( $h >> 16 ) );
     return $h;
 }
 
 sub _mmix32 {
     my $k1 = shift;
-    $k1 = ( $k1 * 0xcc9e2d51 ) & 0xffffffff;
+	use integer;
+    $k1 = _to_uint( ( $k1 * 0xcc9e2d51 ) & 0xffffffff );
     $k1 = _rotl32( $k1, 15 );
-    ( $k1 * 0x1b873593 ) & 0xffffffff;
+    return _to_uint(( $k1 * 0x1b873593 ) & 0xffffffff);
 }
 
 sub _murmur32 {
     my ( $key, $seed ) = @_;
+	if( !defined $seed ){
+	    $seed = 0;
+	}
     utf8::encode($key);
-
     my $len        = length($key);
     my $num_blocks = int( $len / 4 );
     my $tail_len   = $len % 4;
     my @vals       = unpack( 'V*C*', $key );
     my @tail       = splice( @vals, scalar(@vals) - $tail_len, $tail_len );
     my $h1         = $seed;
+
     for my $block (@vals) {
         my $k1 = $block;
         $h1 ^= _mmix32($k1);
         $h1 = _rotl32( $h1, 13 );
-        $h1 = ( $h1 * 5 + 0xe6546b64 ) & 0xffffffff;
+		use integer;
+        $h1 = _to_uint(( $h1 * 5 + 0xe6546b64 ) & 0xffffffff);
     }
 
     if ( @tail > 0 ) {
         my $k1 = 0;
         for my $c1 ( reverse @tail ) {
-            $k1 = ( $k1 << 8 ) | $c1;
+            $k1 = ( ( $k1 << 8 ) | $c1 );
         }
-        $h1 ^= _mmix32($k1);
+		$k1 = _mmix32($k1);
+        $h1 = ( $h1 ^ $k1 );
     }
-
-    $h1 = $h1 ^ ( $len & 0xffffffff );
-    return _fmix32($h1);
+	$h1 =  ($h1 ^ $len);
+	$h1 =  _fmix32($h1);
+    return $h1;
 }
 
 sub _rho {
@@ -153,6 +165,11 @@ sub _rho {
         $x <<= 1;
     }
     return $v;
+}
+
+sub _to_uint {
+	no integer;
+	return 0 || $_[0];
 }
 
 1;
