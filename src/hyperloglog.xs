@@ -56,8 +56,8 @@ PROTOTYPES: DISABLE
 SV *
 new(const char *klass, uint32_t k)
 PREINIT:
-    HLL hll;
-    double alpha  = 0.0;
+HLL hll;
+double alpha = 0.0;
 CODE:
 {
     New(__LINE__, hll, 1, struct HyperLogLog);
@@ -66,9 +66,7 @@ CODE:
     }
     hll->k = k;
     hll->m = 1 << hll->k;
-    hll->registers = (uint8_t*)malloc(hll->m * sizeof(uint8_t));
-    memset(hll->registers, 0, hll->m);
-
+    Newxz(hll->registers, hll->m, uint8_t);
     switch (hll->m) {
         case 16:
         alpha = 0.673;
@@ -95,9 +93,9 @@ OUTPUT:
 void
 add(HLL self, const char* str)
 PREINIT:
-    uint32_t hash;
-    uint32_t index;
-    uint8_t rank;
+uint32_t hash;
+uint32_t index;
+uint8_t rank;
 CODE:
 {
     MurmurHash3_x86_32((void *) str, strlen(str), HLL_HASH_SEED, (void *) &hash);
@@ -134,7 +132,7 @@ CODE:
     } else if (estimate > (1.0/30.0) * two_32) {
         estimate = neg_two_32 * log(1.0 - ( estimate/two_32 ) );
     }
-    
+
     RETVAL = estimate;
 }
 OUTPUT:
