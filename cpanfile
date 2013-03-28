@@ -11,6 +11,10 @@ on 'configure' => sub {
 };
 
 on 'build' => sub {
+    requires 'Module::Build::Pluggable';
+    requires 'Module::Build::Pluggable::GithubMeta';
+    requires 'Module::Build::Pluggable::CPANfile';
+    requires 'Module::Build::Pluggable::XSUtil';
 };
 
 on 'test' => sub {
