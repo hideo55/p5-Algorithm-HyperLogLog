@@ -40,7 +40,7 @@ static HLL get_hll(pTHX_ SV* object, const char* context) {
     return INT2PTR(HLL, address);
 }
 
-uint8_t rho(uint32_t x, uint8_t b) {
+static inline uint8_t rho(uint32_t x, uint8_t b) {
     uint8_t v = 1;
     while (v <= b && !(x & 0x80000000)) {
         v++;
