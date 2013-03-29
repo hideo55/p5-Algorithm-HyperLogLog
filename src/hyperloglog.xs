@@ -9,10 +9,10 @@
 #define HLL_HASH_SEED 313
 
 typedef struct HyperLogLog {
-    uint32_t m;
-    uint8_t k;
+    uint32_t m;         /// register num
+    uint8_t k;          /// register bit width 
     uint8_t* registers;
-    double alphaMM;
+    double alphaMM;     /// alpha * m^2
 }*HLL;
 
 #define GET_HLLPTR(x) get_hll(aTHX_ x, "$self")
@@ -20,6 +20,12 @@ typedef struct HyperLogLog {
 static const double two_32 = 4294967296.0;
 static const double neg_two_32 = -4294967296.0;
 
+/**
+ * Extract pointer of struct HyperLogLog from SV.
+ * 
+ * @param[in]   object  Perl object
+ * @param[in]   context
+ */
 static HLL get_hll(pTHX_ SV* object, const char* context) {
     SV *sv;
     IV address;
@@ -40,26 +46,15 @@ static HLL get_hll(pTHX_ SV* object, const char* context) {
     return INT2PTR(HLL, address);
 }
 
-static inline uint8_t rho(uint32_t x, uint8_t b) {
-    uint8_t v = 1;
-    while (v <= b && !(x & 0x80000000)) {
-        v++;
-        x <<= 1;
-    }
-    return v;
-}
-
-MODULE = Algorithm::HyperLogLog PACKAGE = Algorithm::HyperLogLog
-
-PROTOTYPES: DISABLE
-
-SV *
-new(const char *klass, uint32_t k)
-PREINIT:
-HLL hll;
-double alpha = 0.0;
-CODE:
-{
+/**
+ *  Initialize struct HyperLogLog
+ *  
+ *  @param[in]  k   paramater for determining register size
+ *  @return     pointer of the intialized HLL
+ */
+static inline HLL initialize_hll(pTHX_ uint32_t k){
+    HLL hll = NULL;
+    double alpha = 0.0;
     New(__LINE__, hll, 1, struct HyperLogLog);
     if( k < 4 || k > 16 ) {
         croak("Number of ragisters must be in the range [4,16]");
@@ -82,20 +77,86 @@ CODE:
         break;
     }
     hll->alphaMM = alpha * hll->m * hll->m;
+    return hll;
+}
 
-    RETVAL = sv_newmortal();
-    sv_setref_pv(RETVAL, klass, (void *) hll);
-    (void)SvREFCNT_inc(RETVAL);
+
+/**
+ * Returns position of the leftmost 1-bit of x.
+ * 
+ * @param[in]   x   target of search 1-bit
+ * @param[in]   b   bit width
+ * @return      position of the leftmost 1-bit of x
+ */
+static inline uint8_t rho(uint32_t x, uint8_t b) {
+    uint8_t v = 1;
+    while (v <= b && !(x & 0x80000000)) {
+        v++;
+        x <<= 1;
+    }
+    return v;
+}
+
+MODULE = Algorithm::HyperLogLog PACKAGE = Algorithm::HyperLogLog
+
+PROTOTYPES: DISABLE
+
+# Constructor
+HLL
+new(const char *klass, uint32_t k)
+CODE:
+{
+    RETVAL = initialize_hll(aTHX_ k);
 }
 OUTPUT:
     RETVAL
 
+# Constructor(From dumped data)
+HLL
+_new_from_dump(const char *klass, uint32_t k, AV* data)
+PREINIT:
+I32 i;
+I32 av_len = 0;
+CODE:
+{
+    RETVAL = initialize_hll(aTHX_ k);
+    av_len = av_len(data);
+    for(i = 0;i < av_len;++i){
+        RETVAL->registers[i] = (uint8_t)SvIV(*av_fetch(data, i, 0));
+    }
+}
+OUTPUT:
+    RETVAL
+
+# dump registers
+AV*
+_dump_register(HLL self)
+CODE:
+{
+    RETVAL = (AV*)sv_2mortal((SV*)newAV());
+    uint32_t i;
+    for(i = 0;i < self->m; i++){
+        av_push(RETVAL, newSVuv(self->registers[i]));
+    }
+}
+OUTPUT:
+    RETVAL
+
+# Return number of registers.
+uint32_t
+register_size(HLL self)
+CODE:
+    RETVAL = self->m;
+OUTPUT:
+    RETVAL
+
+# Add element to the estimator
 void
 add(HLL self, const char* str)
 PREINIT:
-uint32_t hash;
-uint32_t index;
-uint8_t rank;
+    uint32_t hash;
+    uint32_t index;
+    uint8_t rank;
 CODE:
 {
     MurmurHash3_x86_32((void *) str, strlen(str), HLL_HASH_SEED, (void *) &hash);
@@ -106,6 +167,8 @@ CODE:
     }
 }
 
+
+# Estimate cardinality
 double
 estimate(HLL self)
 CODE:
@@ -114,12 +177,13 @@ CODE:
     uint32_t m = self->m;
     uint32_t i = 0;
     double sum = 0.0;
+    // Calculate hermonic mean
     for (i = 0; i < m; i++) {
         sum += 1.0/pow(2.0, self->registers[i]);
     }
     estimate = self->alphaMM/sum; // E in the original paper
     if( estimate <= 2.5 * m ) {
-        uint32_t zeros = 0;
+        uint32_t zeros = 0;// V in the original paper
         uint32_t i = 0;
         for (i = 0; i < m; i++) {
             if (self->registers[i] == 0) {
@@ -138,6 +202,7 @@ CODE:
 OUTPUT:
     RETVAL
 
+# Destructor
 void
 DESTROY(HLL self)
 CODE:

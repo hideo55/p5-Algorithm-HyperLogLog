@@ -14,8 +14,9 @@ on 'build' => sub {
 };
 
 on 'test' => sub {
-    requires 'Test::More'     => '0.98';
-    requires 'Test::Fatal'    => '0.008';
+    requires 'Test::More'  => '0.98';
+    requires 'Test::Fatal' => '0.008';
+    requires 'File::Temp';
 };
 
 on 'develop' => sub {

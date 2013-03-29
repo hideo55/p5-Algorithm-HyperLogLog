@@ -50,6 +50,11 @@ sub new {
     return $self;
 }
 
+sub register_size {
+    my $self = shift;
+    return $self->{m};
+}
+
 sub add {
     my ( $self, $data ) = @_;
     my $hash = _murmur32( $data, HLL_HASH_SEED );
