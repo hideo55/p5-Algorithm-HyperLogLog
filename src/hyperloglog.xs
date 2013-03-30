@@ -115,13 +115,13 @@ OUTPUT:
 HLL
 _new_from_dump(const char *klass, uint32_t k, AV* data)
 PREINIT:
-I32 i;
-I32 av_len = 0;
+uint32_t i;
+uint32_t len = 0;
 CODE:
 {
     RETVAL = initialize_hll(aTHX_ k);
-    av_len = av_len(data);
-    for(i = 0;i < av_len;++i){
+    len = av_len(data);
+    for(i = 0;i <= len;++i){
         RETVAL->registers[i] = (uint8_t)SvIV(*av_fetch(data, i, 0));
     }
 }
