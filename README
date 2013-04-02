@@ -28,7 +28,18 @@ METHODS
     `$b` must be a integer between 4 and 16.
 
   new_from_file($filename)
+    This method constructs estimator object and restores the internal data
+    of registers from dumped file.
+
   dump_to_file($filename)
+    This method dumps the internal data of registers to a file.
+
+      $hll->add('foo');
+  
+      ...
+  
+      $hll->dump_to_file('/path/to/dumpfile');
+
   add($data)
     Adds element to the cardinality estimator.
 
