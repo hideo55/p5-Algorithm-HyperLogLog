@@ -122,7 +122,7 @@ CODE:
     RETVAL = initialize_hll(aTHX_ k);
     len = av_len(data);
     for(i = 0;i <= len;++i){
-        RETVAL->registers[i] = (uint8_t)SvIV(*av_fetch(data, i, 0));
+        RETVAL->registers[i] = (uint8_t)SvUV(*av_fetch(data, i, 0));
     }
 }
 OUTPUT:
