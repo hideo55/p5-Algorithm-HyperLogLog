@@ -103,7 +103,17 @@ Constructor.
 
 =head2 new_from_file($filename)
 
+This method constructs estimator object and restores the internal data of registers from dumped file.
+
 =head2 dump_to_file($filename)
+
+This method dumps the internal data of registers to a file.
+
+  $hll->add('foo');
+  
+  ...
+  
+  $hll->dump_to_file('/path/to/dumpfile');
 
 =head2 add($data)
 
