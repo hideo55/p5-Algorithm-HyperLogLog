@@ -18,19 +18,6 @@ require Algorithm::HyperLogLog;
     our @ISA = qw(Algorithm::HyperLogLog::PP);
 }
 
-BEGIN{
-    my $bo_is_le = ( $Config{byteorder} =~ /^1234/ );
-    if( $bo_is_le ){# Little endian
-        *_unpack = sub{
-            return unpack 'V*C*', $_[0];
-        };
-    }else{# Big endian
-        *_unpack = sub{
-            return unpack 'N*C*', $_[0];
-        };
-    }
-}
-
 sub new {
     my ( $class, $k ) = @_;
 
@@ -151,7 +138,7 @@ sub _murmur32 {
     my $len        = length($key);
     my $num_blocks = int( $len / 4 );
     my $tail_len   = $len % 4;
-    my @vals       = _unpack($key);
+    my @vals       = unpack 'V*C*', $key;
     my @tail       = splice( @vals, scalar(@vals) - $tail_len, $tail_len );
     my $h1         = $seed;
 
