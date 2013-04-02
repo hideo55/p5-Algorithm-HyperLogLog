@@ -27,11 +27,17 @@ METHODS
 
     `$b` must be a integer between 4 and 16.
 
+  new_from_file($filename)
+  dump_to_file($filename)
   add($data)
     Adds element to the cardinality estimator.
 
   estimate()
     Returns estimated cardinality value in floation point number.
+
+  register_size()
+    Return number of register.(In the XS impelementation, this equals size
+    in bytes)
 
   XS()
     If using XS backend, this method return true value.

@@ -1,4 +1,9 @@
 Revision history for Algorithm::HyperLogLog
+
+0.10    Wed Apr 03 03:15:00 2013
+        - [improvement] register dump/restore feature
+        - [bugfix] hash calculation error in big endian environment
+
 0.05    Wed Mar 27 23:30:00 2013
         - Fixed: integer overflow in 32bit environment
 
