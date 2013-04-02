@@ -159,7 +159,7 @@ PREINIT:
     uint8_t rank;
 CODE:
 {
-    MurmurHash3_x86_32((void *) str, strlen(str), HLL_HASH_SEED, (void *) &hash);
+    MurmurHash3_32((void *) str, strlen(str), HLL_HASH_SEED, (void *) &hash);
     index = (hash >> (32 - self->k));
     rank = rho( (hash << self->k), 32 - self->k );
     if( rank > self->registers[index] ) {

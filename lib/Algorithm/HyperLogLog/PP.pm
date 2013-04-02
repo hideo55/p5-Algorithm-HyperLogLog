@@ -2,7 +2,8 @@ package Algorithm::HyperLogLog::PP;
 use strict;
 use warnings;
 use 5.008003;
-use Carp qw(croak);
+use Carp ();
+use Config;
 use constant {
     HLL_HASH_SEED => 313,
     TWO_32        => 4294967296.0,
@@ -17,11 +18,24 @@ require Algorithm::HyperLogLog;
     our @ISA = qw(Algorithm::HyperLogLog::PP);
 }
 
+BEGIN{
+    my $bo_is_le = ( $Config{byteorder} =~ /^1234/ );
+    if( $bo_is_le ){# Little endian
+        *_unpack = sub{
+            return unpack 'V*C*', $_[0];
+        };
+    }else{# Big endian
+        *_unpack = sub{
+            return unpack 'N*C*', $_[0];
+        };
+    }
+}
+
 sub new {
     my ( $class, $k ) = @_;
 
     if ( $k < 4 || $k > 16 ) {
-        croak "Number of ragisters must be in the range [4,16]";
+        Carp::croak "Number of ragisters must be in the range [4,16]";
     }
 
     my $m         = 1 << $k;
@@ -137,7 +151,7 @@ sub _murmur32 {
     my $len        = length($key);
     my $num_blocks = int( $len / 4 );
     my $tail_len   = $len % 4;
-    my @vals       = unpack( 'V*C*', $key );
+    my @vals       = _unpack($key);
     my @tail       = splice( @vals, scalar(@vals) - $tail_len, $tail_len );
     my $h1         = $seed;
 

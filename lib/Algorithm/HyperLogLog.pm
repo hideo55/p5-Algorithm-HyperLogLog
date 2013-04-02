@@ -25,28 +25,28 @@ sub new_from_file {
     my ( $class, $filename ) = @_;
     open my $fh, '<', $filename or die $!;
     my $on_error = sub { close $fh; croak "Invalid dump file($filename)"; };
-    
+
     binmode $fh;
     my ( @dumpdata, $buf, $readed );
-    
-    # Read register size data 
+
+    # Read register size data
     $readed = read( $fh, $buf, 1 );
     $on_error->() if $readed != 1;
-    my $k = unpack( 'C', $buf );
-    
+    my $k = unpack 'C', $buf;
+
     # Read register content data
     my $m = 2**$k;
-    $readed = read( $fh, $buf, $m );
+    $readed = read  $fh, $buf, $m;
     $on_error->() if $readed != $m;
     close $fh;
-    @dumpdata = unpack( 'C*', $buf );
+    @dumpdata = unpack 'C*', $buf;
     my $self = $class->_new_from_dump( $k, \@dumpdata );
     return $self;
 }
 
 sub dump_to_file {
     my ( $self, $filename ) = @_;
-    my $k        = log( $self->register_size ) / log(2);# Calculate log2(register_size)
+    my $k        = log( $self->register_size ) / log(2);    # Calculate log2(register_size)
     my $dumpdata = $self->_dump_register();
     open my $fh, '>', $filename or die $!;
     binmode $fh;
