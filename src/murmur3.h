@@ -45,12 +45,15 @@ inline uint32_t rotl32(uint32_t x, int8_t r) {
 /* if __BYTE_ORDER__ is not predefined (like FreeBSD), use arch */
 #elif defined(__i386)  || defined(__x86_64) \
   ||  defined(__alpha) || defined(__vax)
+
 # define BYTESWAP(x) (x)
 /* use __builtin_bswap32 if available */
 #elif defined(__GNUC__) || defined(__clang__)
-# ifdef __has_builtin && __has_builtin(__builtin_bswap32)
-#   define BYTESWAP(x) __builtin_bswap32(x)
-# endif
+
+#ifdef __has_builtin && __has_builtin(__builtin_bswap32)
+#define BYTESWAP(x) __builtin_bswap32(x)
+#endif
+
 #endif
 /* last resort (big-endian w/o __builtin_bswap) */
 #ifndef BYTESWAP

@@ -1,9 +1,6 @@
 Revision history for Algorithm::HyperLogLog
 
-0.11    Web Apr 03 03:40:00 2013
-        - Inproved document
-
-0.10    Wed Apr 03 03:15:00 2013
+0.10    Wed Apr 03 23:15:00 2013
         - [enhancement] register dump/restore feature
         - [bugfix] hash calculation error in big endian environment
 

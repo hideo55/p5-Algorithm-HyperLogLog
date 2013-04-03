@@ -5,7 +5,7 @@ use 5.008003;
 use XSLoader;
 use Carp qw(croak);
 
-our $VERSION = '0.11';
+our $VERSION = '0.10';
 
 our $PERL_ONLY;
 if ( !defined $PERL_ONLY ) {
