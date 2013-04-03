@@ -49,12 +49,10 @@ inline uint32_t rotl32(uint32_t x, int8_t r) {
 # define BYTESWAP(x) (x)
 /* use __builtin_bswap32 if available */
 #elif defined(__GNUC__) || defined(__clang__)
-
 #ifdef __has_builtin && __has_builtin(__builtin_bswap32)
 #define BYTESWAP(x) __builtin_bswap32(x)
-#endif
-
-#endif
+#endif // __has_builtin && __has_builtin(__builtin_bswap32)
+#endif // defined(__GNUC__) || defined(__clang__)
 /* last resort (big-endian w/o __builtin_bswap) */
 #ifndef BYTESWAP
 # define BYTESWAP(x)   ((((x)&0xFF)<<24) \
