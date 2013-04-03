@@ -82,8 +82,15 @@ Algorithm::HyperLogLog - Implementation of the HyperLogLog cardinality estimatio
       $hll->add($_);
   }
   
-  my $cardinality = $hll->estimate();
+  my $cardinality = $hll->estimate(); # Estimate cardinality
+  $hll->dump_to_file('hll_register.dump');# Dumps internal data
 
+Construct object from dumped file.
+
+  use Algorithm::HyperLogLog;
+  
+  # Restore internal state 
+  my $hll = Algorithm::HyperLogLog->new_from_file('hll_register.dump');
 
 =head1 DESCRIPTION
 
@@ -103,17 +110,11 @@ Constructor.
 
 =head2 new_from_file($filename)
 
-This method constructs estimator object and restores the internal data of registers from dumped file.
+This method constructs object and restore the internal data of object from dumped file(dumped by dump_to_file() method).
 
 =head2 dump_to_file($filename)
 
-This method dumps the internal data of registers to a file.
-
-  $hll->add('foo');
-  
-  ...
-  
-  $hll->dump_to_file('/path/to/dumpfile');
+This method dumps the internal data of an object to a file.
 
 =head2 add($data)
 
