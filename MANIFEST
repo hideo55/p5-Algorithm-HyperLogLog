@@ -15,6 +15,7 @@ t/01_new.t
 t/02_basic.t
 t/03_pp.t
 t/04_dump_restore.t
+t/05_dump_restore_pp.t
 typemap
 xt/01_podspell.t
 xt/02_perlcritic.t

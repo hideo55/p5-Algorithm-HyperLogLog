@@ -51,6 +51,18 @@ sub new {
     return $self;
 }
 
+sub _new_from_dump {
+    my ($class, $k, $data) = @_;
+    my $self = $class->new($k);
+    $self->{registers} = $data;
+    return $self;
+}
+
+sub _dump_register {
+    my $self = shift;
+    return $self->{registers};
+}
+
 sub register_size {
     my $self = shift;
     return $self->{m};

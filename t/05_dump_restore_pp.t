@@ -3,9 +3,10 @@ use warnings;
 use Test::More;
 use Test::Fatal qw(exception lives_ok);
 use File::Temp;
+BEGIN {
+    $Algorithm::HyperLogLog::PERL_ONLY = 1;
+}
 use Algorithm::HyperLogLog;
-
-plan 'skip_all' => 'No XS' if !Algorithm::HyperLogLog->XS;
 
 subtest 'dump and restore - immediately after initialize' => sub {
     my $hll      = Algorithm::HyperLogLog->new(5);
