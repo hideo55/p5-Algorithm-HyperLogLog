@@ -21,8 +21,8 @@ my $builder = Module::Build::Pluggable->new(
     create_readme  => 1,
     create_license => 1,
     add_to_cleanup => [
-        'Algorithm-HyperLogLog-*', 'lib/Algorithm/typemap', 'MANIFEST.bak', 'lib/Algorithm/*.o',
-        'lib/Algorithm/*.h',       'lib/Algorithm/*.c',     'lib/Algorithm/*.xs',
+        'Algorithm-HyperLogLog-*', 'MANIFEST.bak',      'lib/Algorithm/*.o',
+        'lib/Algorithm/*.h',       'lib/Algorithm/*.c', 'lib/Algorithm/*.xs',
     ],
     meta_add => {
         keywords  => [qw/HyperLogLog cardinality/],
