@@ -17,6 +17,7 @@
 
 #if defined(_MSC_VER)
 
+#define FORCE_INLINE    __forceinline
 typedef unsigned char uint8_t;
 typedef unsigned long uint32_t;
 typedef unsigned __int64 uint64_t;
@@ -27,7 +28,7 @@ typedef unsigned __int64 uint64_t;
 #include <stdint.h>
 
 #endif // !defined(_MSC_VER)
-#define FORCE_INLINE __attribute__((always_inline))
+#define FORCE_INLINE inline __attribute__((always_inline))
 
 inline uint32_t rotl32(uint32_t x, int8_t r) {
     return (x << r) | (x >> (32 - r));
@@ -71,7 +72,7 @@ inline uint32_t rotl32(uint32_t x, int8_t r) {
 //-----------------------------------------------------------------------------
 // Finalization mix - force all bits of a hash block to avalanche
 
-uint32_t fmix32(uint32_t h) {
+FORCE_INLINE uint32_t fmix32(uint32_t h) {
     h ^= h >> 16;
     h *= 0x85ebca6b;
     h ^= h >> 13;
