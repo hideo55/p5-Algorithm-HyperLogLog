@@ -1,7 +1,7 @@
 package Algorithm::HyperLogLog::PP;
 use strict;
 use warnings;
-use 5.008003;
+use 5.008008;
 use Carp ();
 use Config;
 use constant {
