@@ -1,5 +1,5 @@
 #!perl
-requires 'perl' => '5.008003';
+requires 'perl' => '5.008008';
 requires 'XSLoader';
 requires 'Carp';
 

@@ -1,5 +1,6 @@
 use strict;
 use warnings FATAL => 'all';
+use 5.008008;
 use Module::Build::Pluggable (
     'CPANfile',
     'GithubMeta',
