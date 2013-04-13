@@ -10,7 +10,7 @@ use constant {
     NEG_TWO_32    => -4294967296.0,
 };
 
-our $VERSION = "0.13";
+our $VERSION = "0.14";
 
 require Algorithm::HyperLogLog;
 
