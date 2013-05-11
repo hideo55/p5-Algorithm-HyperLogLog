@@ -4,7 +4,7 @@ use warnings;
 use 5.008008;
 use Carp qw(croak);
 
-our $VERSION = '0.15';
+our $VERSION = '0.16';
 
 our $PERL_ONLY;
 if ( !defined $PERL_ONLY ) {
