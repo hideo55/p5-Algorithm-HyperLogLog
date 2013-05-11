@@ -152,18 +152,25 @@ OUTPUT:
 
 # Add element to the estimator
 void
-add(HLL self, const char* str)
+add(HLL self, ...)
 PREINIT:
     uint32_t hash;
     uint32_t index;
     uint8_t rank;
+    I32 arg_index;
+    STRLEN n_a;
 CODE:
 {
-    MurmurHash3_32((void *) str, strlen(str), HLL_HASH_SEED, (void *) &hash);
-    index = (hash >> (32 - self->k));
-    rank = rho( (hash << self->k), 32 - self->k );
-    if( rank > self->registers[index] ) {
-        self->registers[index] = rank;
+    if(items > 1){
+        for(arg_index = 1; arg_index < items; ++arg_index){
+            char* str = SvPV(ST(arg_index), n_a);
+            MurmurHash3_32((void *) str, strlen(str), HLL_HASH_SEED, (void *) &hash);
+            index = (hash >> (32 - self->k));
+            rank = rho( (hash << self->k), 32 - self->k );
+            if( rank > self->registers[index] ) {
+                self->registers[index] = rank;
+            }
+        }
     }
 }
 

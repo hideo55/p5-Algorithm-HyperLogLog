@@ -4,6 +4,7 @@ requires 'XSLoader';
 requires 'Carp';
 
 on 'configure' => sub {
+    requires 'Module::Build' => '0.4005';
     requires 'Module::Build::Pluggable';
     requires 'Module::Build::Pluggable::GithubMeta';
     requires 'Module::Build::Pluggable::CPANfile';
@@ -20,7 +21,7 @@ on 'test' => sub {
 };
 
 on 'develop' => sub {
-    requires 'Test::Spelling';
+    requires 'Test::Spellunker';
     requires 'Test::Perl::Critic';
     requires 'Test::Pod';
     requires 'Test::Pod::Coverage';
