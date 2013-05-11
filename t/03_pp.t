@@ -7,7 +7,7 @@ BEGIN {
     $Algorithm::HyperLogLog::PERL_ONLY = 1;
 }
 use Algorithm::HyperLogLog;
-my $hll = Algorithm::HyperLogLog->new(6);
+my $hll = Algorithm::HyperLogLog->new(14);
 
 isa_ok $hll, 'Algorithm::HyperLogLog';
 
