@@ -122,11 +122,11 @@ Adds element to the cardinality estimator.
 
 =head2 estimate()
 
-Returns estimated cardinality value in floation point number.
+Returns estimated cardinality value in floating point number.
 
 =head2 register_size()
 
-Return number of register.(In the XS impelementation, this equals size in bytes)
+Return number of register.(In the XS implementation, this equals size in bytes)
 
 =head2 XS()
 
