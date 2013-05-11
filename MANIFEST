@@ -17,7 +17,7 @@ t/04_dump_restore.t
 t/05_dump_restore_pp.t
 xs/hyperloglog.xs
 xs/murmur3.h
-xs/typemap
+typemap
 xt/01_podspell.t
 xt/02_perlcritic.t
 xt/03_pod.t

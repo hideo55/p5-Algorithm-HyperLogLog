@@ -24,11 +24,11 @@ my $builder = Module::Build::Pluggable->new(
     create_license => 1,
     add_to_cleanup => [
         'Algorithm-HyperLogLog-*', 'MANIFEST.bak', 'lib/Algorithm/*.o', 'lib/Algorithm/*.h',
-        'lib/Algorithm/*.c',       'lib/Algorithm/*.xs',  'lib/Algorithm/typemap',
+        'lib/Algorithm/*.c',       'lib/Algorithm/*.xs',
     ],
     meta_add => {
         keywords  => [qw/HyperLogLog cardinality/],
-        resources => { bugtracker => 'https://github.com/hideo55/p5-Algorithm-HyperLogLog/issues', },
+        resources => { bugtracker => 'https://github.icom/hideo55/p5-Algorithm-HyperLogLog/issues', },
     },
 );
 
