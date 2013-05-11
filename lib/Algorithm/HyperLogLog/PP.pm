@@ -54,7 +54,7 @@ sub new {
 }
 
 sub _new_from_dump {
-    my ($class, $k, $data) = @_;
+    my ( $class, $k, $data ) = @_;
     my $self = $class->new($k);
     $self->{registers} = $data;
     return $self;
@@ -71,12 +71,14 @@ sub register_size {
 }
 
 sub add {
-    my ( $self, $data ) = @_;
-    my $hash = _murmur32( $data, HLL_HASH_SEED );
-    my $index = ( $hash >> ( 32 - $self->{'k'} ) );
-    my $rank = _rho( ( $hash << $self->{k} ), 32 - $self->{k} );
-    if ( $rank > $self->{registers}[$index] ) {
-        $self->{registers}[$index] = $rank;
+    my ( $self, @data_list ) = @_;
+    for my $data (@data_list) {
+        my $hash = _murmur32( $data, HLL_HASH_SEED );
+        my $index = ( $hash >> ( 32 - $self->{'k'} ) );
+        my $rank = _rho( ( $hash << $self->{k} ), 32 - $self->{k} );
+        if ( $rank > $self->{registers}[$index] ) {
+            $self->{registers}[$index] = $rank;
+        }
     }
 }
 

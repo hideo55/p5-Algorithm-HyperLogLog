@@ -33,4 +33,4 @@ MYMETA\.
 ^lib/Algorithm/.+\.h
 ^lib/Algorithm/.+\.o
 ^lib/Algorithm/.+\.xs
-
+^lib/Algorithm/typemap
