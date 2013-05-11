@@ -1,5 +1,9 @@
 Revision history for Algorithm::HyperLogLog
 
+0.15    Sat May 11 15:47:00 2013
+        - Support multi arguments for add()
+        - Support '--pureperl-only' option for Build.PL
+
 0.14    Sat Apr 14 03:30:00 2013
         - Change required perl version
         - Add $VERSION to Algorithm/HyperLogLog/PP.pm
