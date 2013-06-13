@@ -126,12 +126,12 @@ sub _fmix32 {
     $h = ( $h ^ ( $h >> 16 ) );
     {
         use integer;
-        $h = _to_uint( ( $h * 0x85ebca6b ) & 0xffffffff );
+        $h = _to_uint32( $h * 0x85ebca6b );
     }
     $h = ( $h ^ ( $h >> 13 ) );
     {
         use integer;
-        $h = _to_uint( ( $h * 0xc2b2ae35 ) & 0xffffffff );
+        $h = _to_uint32( $h * 0xc2b2ae35 );
     }
     $h = ( $h ^ ( $h >> 16 ) );
     return $h;
@@ -140,9 +140,9 @@ sub _fmix32 {
 sub _mmix32 {
     my $k1 = shift;
     use integer;
-    $k1 = _to_uint( ( $k1 * 0xcc9e2d51 ) & 0xffffffff );
+    $k1 = _to_uint32( $k1 * 0xcc9e2d51 );
     $k1 = _rotl32( $k1, 15 );
-    return _to_uint( ( $k1 * 0x1b873593 ) & 0xffffffff );
+    return _to_uint32( $k1 * 0x1b873593 );
 }
 
 sub _murmur32 {
@@ -163,7 +163,7 @@ sub _murmur32 {
         $h1 ^= _mmix32($k1);
         $h1 = _rotl32( $h1, 13 );
         use integer;
-        $h1 = _to_uint( ( $h1 * 5 + 0xe6546b64 ) & 0xffffffff );
+        $h1 = _to_uint32( $h1 * 5 + 0xe6546b64 );
     }
 
     if ( @tail > 0 ) {
@@ -189,9 +189,9 @@ sub _rho {
     return $v;
 }
 
-sub _to_uint {
+sub _to_uint32 {
     no integer;
-    return 0 || $_[0];
+    return $_[0] & 0xFFFFFFFF;
 }
 
 1;

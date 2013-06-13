@@ -34,8 +34,6 @@ inline uint32_t rotl32(uint32_t x, int8_t r) {
     return (x << r) | (x >> (32 - r));
 }
 
-#define ROTL32(x,y) rotl32(x,y)
-
 #define BIG_CONSTANT(x) (x##LLU)
 
 /* NO-OP for little-endian platforms */
@@ -108,11 +106,11 @@ void MurmurHash3_32(const void * key, int len, uint32_t seed, void * out) {
         uint32_t k1 = getblock(blocks,i);
 
         k1 *= c1;
-        k1 = ROTL32(k1,15);
+        k1 = rotl32(k1,15);
         k1 *= c2;
 
         h1 ^= k1;
-        h1 = ROTL32(h1,13);
+        h1 = rotl32(h1,13);
         h1 = h1 * 5 + 0xe6546b64;
     }
 
@@ -131,7 +129,7 @@ void MurmurHash3_32(const void * key, int len, uint32_t seed, void * out) {
         case 1:
             k1 ^= tail[0];
             k1 *= c1;
-            k1 = ROTL32(k1,15);
+            k1 = rotl32(k1,15);
             k1 *= c2;
             h1 ^= k1;
         };
