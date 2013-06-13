@@ -1,5 +1,8 @@
 Revision history for Algorithm::HyperLogLog
 
+0.17    Fri Jun 14 02:02:00 2013
+        - Fixed warning in perl-5.18
+
 0.16    Sat May 11 16:05:00 2013
         - Fixed broken test
 
