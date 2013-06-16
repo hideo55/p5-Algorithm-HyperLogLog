@@ -9,12 +9,10 @@ on 'configure' => sub {
     requires 'Module::Build::Pluggable::GithubMeta';
     requires 'Module::Build::Pluggable::CPANfile';
     requires 'Module::Build::Pluggable::XSUtil';
+    requires 'Module::Build::Pluggable::ReadmeMarkdownFromPod';
 };
 
 on 'build' => sub {
-};
-
-on 'test' => sub {
     requires 'Test::More'  => '0.98';
     requires 'Test::Fatal' => '0.008';
     requires 'File::Temp';

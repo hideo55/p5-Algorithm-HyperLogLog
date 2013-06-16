@@ -9,6 +9,7 @@ use Module::Build::Pluggable (
         c99         => 1,
         ppport      => 'lib/Algorithm/ppport.h',
     },
+    'ReadmeMarkdownFromPod',
 );
 
 my $builder = Module::Build::Pluggable->new(
@@ -20,7 +21,6 @@ my $builder = Module::Build::Pluggable->new(
     allow_pureperl => 1,
     no_index       => { 'directory' => [ 't', 'xt', 'inc', 'eg' ] },
     test_files => ( -d '.git' || $ENV{RELEASE_TESTING} ) ? [qw(t/ xt/)] : ['t/'],
-    create_readme  => 1,
     create_license => 1,
     add_to_cleanup => [
         'Algorithm-HyperLogLog-*', 'MANIFEST.bak', 'lib/Algorithm/*.o', 'lib/Algorithm/*.h',
