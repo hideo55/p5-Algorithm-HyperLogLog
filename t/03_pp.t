@@ -13,19 +13,27 @@ isa_ok $hll, 'Algorithm::HyperLogLog';
 
 ok !$hll->XS, 'is Pure Perl?';
 
-my %unique;
-for ( 0 .. 999 ) {
-    my $str = q{};
-    while ( exists $unique{$str} ) {
-        $str = random_string(10);
-    }
-    $unique{$str} = 1;
-}
+my $error_sum = 0;
+my $repeat    = 100;
 
-$hll->add(keys %unique);
-my $num = scalar keys %unique;
-my $error = abs($num - $hll->estimate()) / $num * 100;
-ok $error < 1;
+for ( 1 .. $repeat ) {
+
+    my %unique;
+    for ( 0 .. 999 ) {
+        my $str = q{};
+        while ( exists $unique{$str} ) {
+            $str = random_string(10);
+        }
+        $unique{$str} = 1;
+    }
+
+    $hll->add( keys %unique );
+    my $num = scalar keys %unique;
+    my $error_sum += abs( $num - $hll->estimate() );
+}
+my $error_avg   = $error_sum / $repeat;
+my $error_ratio = $error_avg / 1000 * 100;
+ok $error_ratio < 1;
 
 done_testing();
 
