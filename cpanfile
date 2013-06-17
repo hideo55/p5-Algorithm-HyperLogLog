@@ -2,7 +2,7 @@
 requires 'perl' => '5.008008';
 requires 'XSLoader';
 requires 'Carp';
-requires 'Digest::MurmurHash3::PurePerl';
+requires 'Digest::MurmurHash3::PurePerl' => '>=0.02';
 
 on 'configure' => sub {
     requires 'Module::Build' => '0.4005';
