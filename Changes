@@ -1,5 +1,8 @@
 Revision history for Algorithm::HyperLogLog
 
+0.19    Mon Jun 17 22:30:00 2013
+        - Change MurmurHash3 implementation for PP
+
 0.18    Sun Jun 16 23:50:00 2013
         - Update dependency
         - Change document format
