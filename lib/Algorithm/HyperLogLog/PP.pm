@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use 5.008008;
 use Carp ();
-use Config;
+use Digest::MurmurHash3::PurePerl qw(murmur32);
 use constant {
     HLL_HASH_SEED => 313,
     TWO_32        => 4294967296.0,
@@ -73,7 +73,7 @@ sub register_size {
 sub add {
     my ( $self, @data_list ) = @_;
     for my $data (@data_list) {
-        my $hash = _murmur32( $data, HLL_HASH_SEED );
+        my $hash = murmur32( $data, HLL_HASH_SEED );
         my $index = ( $hash >> ( 32 - $self->{'k'} ) );
         my $rank = _rho( ( $hash << $self->{k} ), 32 - $self->{k} );
         if ( $rank > $self->{registers}[$index] ) {
@@ -116,69 +116,6 @@ sub XS {
     0;
 }
 
-sub _rotl32 {
-    my ( $x, $r ) = @_;
-    return ( ( $x << $r ) | ( $x >> ( 32 - $r ) ) );
-}
-
-sub _fmix32 {
-    my $h = shift;
-    $h = ( $h ^ ( $h >> 16 ) );
-    {
-        use integer;
-        $h = _to_uint32( $h * 0x85ebca6b );
-    }
-    $h = ( $h ^ ( $h >> 13 ) );
-    {
-        use integer;
-        $h = _to_uint32( $h * 0xc2b2ae35 );
-    }
-    $h = ( $h ^ ( $h >> 16 ) );
-    return $h;
-}
-
-sub _mmix32 {
-    my $k1 = shift;
-    use integer;
-    $k1 = _to_uint32( $k1 * 0xcc9e2d51 );
-    $k1 = _rotl32( $k1, 15 );
-    return _to_uint32( $k1 * 0x1b873593 );
-}
-
-sub _murmur32 {
-    my ( $key, $seed ) = @_;
-    if ( !defined $seed ) {
-        $seed = 0;
-    }
-    utf8::encode($key);
-    my $len        = length($key);
-    my $num_blocks = int( $len / 4 );
-    my $tail_len   = $len % 4;
-    my @vals       = unpack 'V*C*', $key;
-    my @tail       = splice( @vals, scalar(@vals) - $tail_len, $tail_len );
-    my $h1         = $seed;
-
-    for my $block (@vals) {
-        my $k1 = $block;
-        $h1 ^= _mmix32($k1);
-        $h1 = _rotl32( $h1, 13 );
-        use integer;
-        $h1 = _to_uint32( $h1 * 5 + 0xe6546b64 );
-    }
-
-    if ( @tail > 0 ) {
-        my $k1 = 0;
-        for my $c1 ( reverse @tail ) {
-            $k1 = ( ( $k1 << 8 ) | $c1 );
-        }
-        $k1 = _mmix32($k1);
-        $h1 = ( $h1 ^ $k1 );
-    }
-    $h1 = ( $h1 ^ $len );
-    $h1 = _fmix32($h1);
-    return $h1;
-}
-
 sub _rho {
     my ( $x, $b ) = @_;
     my $v = 1;
@@ -187,11 +124,6 @@ sub _rho {
         $x <<= 1;
     }
     return $v;
-}
-
-sub _to_uint32 {
-    no integer;
-    return $_[0] & 0xFFFFFFFF;
 }
 
 1;
