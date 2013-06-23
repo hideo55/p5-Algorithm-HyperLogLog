@@ -13,7 +13,6 @@ MYMETA.yml
 .project
 .includepath
 cover_db
-META.json
 _build
 Build
 lib/Algorithm/HyperLogLog.c
@@ -21,3 +20,10 @@ lib/Algorithm/HyperLogLog.o
 lib/Algorithm/HyperLogLog.xs
 lib/Algorithm/ppport.h
 
+/Algorithm-HyperLogLog-*
+/.build
+/_build_params
+/Build
+!Build/
+!META.json
+!LICENSE
