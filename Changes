@@ -1,6 +1,8 @@
 Revision history for Algorithm::HyperLogLog
 
 {{$NEXT}}
+    - Change dependency
+    - Switch aurhoring tool to Minilla
 
 0.19    Mon Jun 17 22:30:00 2013
     - Change MurmurHash3 implementation for PP
