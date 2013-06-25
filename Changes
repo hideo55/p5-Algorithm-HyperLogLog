@@ -2,6 +2,9 @@ Revision history for Algorithm::HyperLogLog
 
 {{$NEXT}}
 
+0.22 2013-06-25T22:54:20Z
+    - Fixed broken test
+
 0.21 2013-06-25T17:42:09Z
     - Fixed '--pureperl-only' option support
 
