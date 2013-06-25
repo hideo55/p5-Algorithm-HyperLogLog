@@ -2,6 +2,9 @@ Revision history for Algorithm::HyperLogLog
 
 {{$NEXT}}
 
+0.21 2013-06-25T17:42:09Z
+    - Fixed '--pureperl-only' option support
+
 0.20 2013-06-23T09:09:42Z
     - Change dependency
     - Switch aurhoring tool to Minilla
