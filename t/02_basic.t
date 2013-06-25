@@ -62,20 +62,6 @@ my $error_ratio = $error_avg / 10001 * 100;
 
 ok $error_ratio < 1.0, 'Error ratio less than 1.0%';
 
-my %unique;
-for ( 0 .. 999 ) {
-    my $str = q{};
-    while ( exists $unique{$str} ) {
-        $str = random_string(10);
-    }
-    $unique{$str} = 1;
-}
-my $hll   = Algorithm::HyperLogLog->new(16);
-$hll->add(keys %unique);
-my $num = scalar keys %unique;
-my $error = abs($num - $hll->estimate()) / $num * 100;
-ok $error < 1;
-
 done_testing();
 
 sub random_string {
