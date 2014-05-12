@@ -124,6 +124,10 @@ Adds element to the cardinality estimator.
 
 Returns estimated cardinality value in floating point number.
 
+=head2 merge($other)
+
+Merges the estimate from 'other' into this object, returning the estimate of their union.
+
 =head2 register_size()
 
 Return number of register.(In the XS implementation, this equals size in bytes)

@@ -209,6 +209,29 @@ CODE:
 OUTPUT:
     RETVAL
 
+
+# Merge two HLLs
+double
+merge(HLL self, HLL other)
+CODE:
+{
+    uint32_t m = self->m;
+    uint32_t i = 0;
+
+    if (m != other->m) {
+        croak("hll size mismatch: %d != %d\n", m, other->m);
+    }
+
+    for (i = 0; i < m; i++) {
+        if (self->registers[i] < other->registers[i]) {
+            self->registers[i] = other->registers[i];
+        }
+    }
+    XSRETURN_UNDEF;
+}
+OUTPUT:
+    RETVAL
+
 # Destructor
 void
 DESTROY(HLL self)
