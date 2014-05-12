@@ -5,7 +5,7 @@ requires 'Carp';
 requires 'Digest::MurmurHash3::PurePerl' => '>=0.02';
 
 on 'configure' => sub {
-    requires 'Module::Build::XSUtil'    => '>=0.10';
+    requires 'Module::Build::XSUtil'    => '>=0.09';
 };
 
 on 'build' => sub {

@@ -38,7 +38,7 @@
             "CPAN::Meta" : "0",
             "CPAN::Meta::Prereqs" : "0",
             "Module::Build" : "0.38",
-            "Module::Build::XSUtil" : "0.10"
+            "Module::Build::XSUtil" : "0.09"
          }
       },
       "develop" : {
@@ -74,7 +74,7 @@
          "web" : "https://github.com/hideo55/p5-Algorithm-HyperLogLog"
       }
    },
-   "version" : "0.22",
+   "version" : "0.23",
    "x_contributors" : [
       "Damian Gryski <damian@gryski.com>",
       "hideo55 <hide.o.j55@gmail.com>"

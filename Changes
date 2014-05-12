@@ -2,6 +2,10 @@ Revision history for Algorithm::HyperLogLog
 
 {{$NEXT}}
 
+0.23 2014-05-12T16:58:51Z
+    - Add new method 'Algorithm::HyperLogLog::merge()'
+        (dgryski)
+
 0.22 2013-06-25T22:54:20Z
     - Fixed broken test
 
