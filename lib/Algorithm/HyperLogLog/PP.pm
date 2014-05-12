@@ -112,6 +112,19 @@ sub estimate {
     return $estimate;
 }
 
+sub merge {
+    my ($self, $other) = @_;
+    my $m    = $self->{m};
+
+    die "hll size misatch" if $self->{m} != $other->{m};
+
+    for (my $i=0; $i<$m; $i++) {
+        if ($self->{registers}[$i] < $other->{registers}[$i]) {
+            $self->{registers}[$i] = $other->{registers}[$i];
+        }
+    }
+}
+
 sub XS {
     0;
 }
