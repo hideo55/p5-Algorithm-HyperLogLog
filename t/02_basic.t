@@ -5,7 +5,7 @@ use Test::Fatal qw(exception lives_ok);
 use Algorithm::HyperLogLog;
 use Algorithm::HyperLogLog::PP;
 
-plan 'skip_all' => 'No XS' if !Algorithm::HyperLogLog->XS;
+plan skip_all => 'No XS' unless Algorithm::HyperLogLog->XS;
 
 my $error_sum = 0;
 my $repeat    = 100;

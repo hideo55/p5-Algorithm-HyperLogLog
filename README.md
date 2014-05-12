@@ -6,15 +6,12 @@ Algorithm::HyperLogLog - Implementation of the HyperLogLog cardinality estimatio
 
     use Algorithm::HyperLogLog;
     
-
     my $hll = Algorithm::HyperLogLog->new(14);
     
-
     while(<>){
         $hll->add($_);
     }
     
-
     my $cardinality = $hll->estimate(); # Estimate cardinality
     $hll->dump_to_file('hll_register.dump');# Dumps internal data
 
@@ -22,7 +19,6 @@ Construct object from dumped file.
 
     use Algorithm::HyperLogLog;
     
-
     # Restore internal state 
     my $hll = Algorithm::HyperLogLog->new_from_file('hll_register.dump');
 
@@ -57,6 +53,10 @@ Adds element to the cardinality estimator.
 ## estimate()
 
 Returns estimated cardinality value in floating point number.
+
+## merge($other)
+
+Merges the estimate from 'other' into this object, returning the estimate of their union.
 
 ## register\_size()
 
