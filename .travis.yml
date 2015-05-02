@@ -4,6 +4,7 @@ before_install:
 install: cpanm -nq --installdeps --with-recommends --with-suggests .
 env: RELEASE_TESTING=1 AUTOMATED_TESTING=1
 perl:
+  - "5.20"
   - "5.18"
   - "5.16"
   - "5.14"
