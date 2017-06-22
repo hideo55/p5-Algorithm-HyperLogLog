@@ -72,7 +72,7 @@
          "web" : "https://github.com/hideo55/p5-Algorithm-HyperLogLog"
       }
    },
-   "version" : "0.23",
+   "version" : "0.24",
    "x_contributors" : [
       "Damian Gryski <damian@gryski.com>",
       "hideo55 <hide.o.j55@gmail.com>"
